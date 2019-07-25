@@ -38,4 +38,4 @@ On the CloudFormation wizard just follow clicking on "Next" button until you hav
 
 Once the stack is created, navigate to the Cloud9 console as the image below.
 
-[AWS Console](./images/aws_console.png)
+![AWS Console](./images/aws_console.png)
