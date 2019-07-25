@@ -318,3 +318,142 @@ On the left menu, click Tables, on the table click "Metrics".
 
 ![Metrics](./images/metrics.png)
 
+You see the metrics like the sample below:
+
+![Metrics1](./images/metrics1.png)
+
+##### Question: Why there are throttling events on the table and there are not on the GSI?
+
+## Step 5 – Increase the capacity
+
+Run the following AWS CLI command to increase the WCU and RCU from 5 to 100.
+
+```
+aws dynamodb update-table --table-name tlog \
+--provisioned-throughput ReadCapacityUnits=100,WriteCapacityUnits=100
+```
+
+Run the command to wait until the table becomes Active.
+
+```
+aws dynamodb wait table-exists --table-name tlog
+```
+
+##### Question: How long did it take for increasing the capacity?
+
+## Step 6 - Load more data with the new capacity
+
+After the update, run the Python script again to populate the table with file logfile_medium2.csv with the same number of rows of the previous run. You will see that at this time the execution will be faster.
+
+```
+python load_tlog.py tlog ./data/logfile_medium2.csv
+```
+
+The output should show a result like:
+
+```
+row: 100 in 0.678274869919
+row: 200 in 0.637241125107
+row: 300 in 0.623446941376
+row: 400 in 0.666973114014
+row: 500 in 0.694450139999
+row: 600 in 0.643283843994
+row: 700 in 0.644812107086
+row: 800 in 0.63000702858
+row: 900 in 0.76971411705
+row: 1000 in 0.684530973434
+row: 1100 in 0.667228937149
+row: 1200 in 0.66502404213
+row: 1300 in 0.681458950043
+row: 1400 in 0.644996166229
+row: 1500 in 0.657227993011
+row: 1600 in 0.650546073914
+row: 1700 in 0.643900156021
+row: 1800 in 0.62757897377
+row: 1900 in 0.646264076233
+row: 2000 in 0.701603889465
+RowCount: 2000, Total seconds: 13.3077070713
+```
+##### Note: With the new capacity the load time was consistent for the whole dataset.
+
+## Step 7 – Low capacity GSI
+
+For the next step, we are going to create a new table with different capacity units. At this time, the GSI will have on 1 WCU and 1 RCU, for the purpose of this exercise.
+
+Run the following command:
+
+```
+aws dynamodb create-table --table-name tlog_gsi_low \
+--attribute-definitions AttributeName=requestid,AttributeType=N AttributeName=host,AttributeType=S \
+--key-schema AttributeName=requestid,KeyType=HASH \
+--provisioned-throughput ReadCapacityUnits=1000,WriteCapacityUnits=1000 \
+--global-secondary-indexes  IndexName=host-requestid-gsi,\
+KeySchema=["{AttributeName=host,KeyType=HASH},{AttributeName=requestid,KeyType=RANGE}"],\
+Projection="{ProjectionType=INCLUDE,NonKeyAttributes=['bytessent']}",\
+ProvisionedThroughput="{ReadCapacityUnits=1,WriteCapacityUnits=1}"
+```
+
+Run the command to wait until the table becomes Active:
+
+```
+aws dynamodb wait table-exists --table-name tlog_gsi_low
+```
+
+This command will create a new table and one GSI with the following definition:
+
+Table: tlog_gsi_low
+
+*	Attribute: requestid
+*	Key Type: Hash
+*	Table RCU = 1000
+*	Table WCU = 1000
+
+GSI: host-requestid-gsi
+
+*	Attribute: host
+*	Key Type: Hash
+*	Attribute: requestid
+*	Key Type: Range
+*	Projection Include: bytessent
+*	GSI RCU = 1
+*	GSI WCU = 1
+*	
+
+You can, now, populate the new table with a large dataset. At this time, you will run a script that uses a multi-thread version to have more writes per second on the DynamoDB table.
+
+```
+python load_tlog_parallel.py tlog_gsi_low
+```
+
+Eventually, the execution will be throttled and show the error message like below:
+
+```Error:Error: (, ProvisionedThroughputExceededException(u'An error occurred (ProvisionedThroughputExceededException) when calling the PutItem operation (reached max retries: 9): The level of configured provisioned throughput for one or more global secondary indexes of the table was exceeded. Consider increasing your provisioning level for the under-provisioned global secondary indexes with the UpdateTable API',), )```
+
+You can cancel the operation, typing Ctrl+C. It can take some time to cancel.
+
+##### Note: This new table has more RCU=1000 and WCU=1000 but we received an error and the load time increased.
+
+##### Question: Could you explain the behavior of the test?
+
+Open the AWS console to view the metrics for the table tlog_gsi_low.
+
+![Metrics2](./images/metrics2.png)
+
+Note above that the consumed writes were below the provisioned writes for the table during the test.
+
+![Metrics3](./images/metrics3.png)
+
+Note above that the consumed writes were high than the provisioned writes for the GSI.
+
+![Metrics4](./images/metrics4.png)
+
+Note that the table was throttled, even having enough write capacity.
+
+![Metrics5](./images/metrics5.png)
+
+## Exercise 2 - Table Scan and Parallel Table Scan
+
+
+
+
+
