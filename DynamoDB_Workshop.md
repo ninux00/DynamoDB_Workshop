@@ -1,5 +1,6 @@
 # DynamoDB Practical Workshop
 July, 2019 Version
+
 Overview
 This lab document is meant to provide some practical exercises of implementing design patters using Amazon DynamoDB. Here's some of what you'll find:
 List of exercises:
@@ -22,9 +23,18 @@ List of exercises:
 *	Basic knowledge on DynamoDB
 *	Some experience with Python
 
-# Setup 
-## Step 1 – Access AWS Console and search for “Cloud9”
+# Preparation 
+## Step 1 - Deploy the Cloudformation template.
+
+Click on the "Deploy" link below that references the region assigned to you.
 
 Region| Deploy
 ------|-----
+US East 1 (N.Virginia) | <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=DynamoDB-Workshop&templateURL=https://dynamodb-workshop.s3.amazonaws.com/cloudformation_cloud9.json" target="_blank">![Deploy in us-east-1](./images/deploy-to-aws.png)</a>
 US East 2 (Ohio) | <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=DynamoDB-Workshop&templateURL=https://dynamodb-workshop.s3.amazonaws.com/cloudformation_cloud9.json" target="_blank">![Deploy in us-east-2](./images/deploy-to-aws.png)</a>
+US West 2 (Oregon) | <a href="https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=DynamoDB-Workshop&templateURL=https://dynamodb-workshop.s3.amazonaws.com/cloudformation_cloud9.json" target="_blank">![Deploy in us-west-2](./images/deploy-to-aws.png)</a>
+
+On the CloudFormation wizard just follow clicking on "Next" button until you have the option to click on "Create Stack" button and wait to the creation of the stack.
+
+Once the stack is created, navigate to the Cloud9 console as the image below.
+
