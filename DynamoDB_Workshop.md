@@ -44,10 +44,7 @@ It will bring you to the Cloud9 console where you will find an Environment named
 
 !(./images/cloud9_console.png)
 
-Wait a few moments and you will be redirected to the IDE of your new environment.
-At the botton of the screen you have access to a terminal.
-In this workshop you will use this terminal to run all the commands.
-Few free to explore the IDE.
+Wait a few moments and you will be redirected to the IDE of your new environment. At the botton of the screen you have access to a terminal. In this workshop you will use this terminal to run all the commands. Few free to explore the IDE.
 
 !(./images/cloud9_ide.png)
 
