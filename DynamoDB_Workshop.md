@@ -38,7 +38,7 @@ On the CloudFormation wizard just follow clicking on "Next" button until you hav
 
 Once the stack is created, navigate to the Cloud9 console as the image below.
 
-!(./images/aws_console.png)
+![AWS Console](./images/aws_console.png)
 
 It will bring you to the Cloud9 console where you will find an Environment named "DynamoDB-Workshop-Environmet", click on the "Open IDE" button.
 
