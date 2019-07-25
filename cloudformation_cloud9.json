@@ -1,0 +1,14 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+        "Cloud9":{
+            "Type" : "AWS::Cloud9::EnvironmentEC2",
+            "Properties" : {
+                "AutomaticStopTimeMinutes" : 30,
+                "Description" : "Cloud9 Environment used for DynamoDB Workshop",
+                "InstanceType" : t2.micro,
+                "Name": "DynamoDB-Workshop-Environment"
+            }
+        }
+}
+}
