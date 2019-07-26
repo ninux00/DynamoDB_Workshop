@@ -68,7 +68,7 @@ unzip ../workshop.zip
 Go to the workshop folder and run the ls command:
 
 ```
-cd /home/ec2-user/workshop
+cd /home/ec2-user/environment/workshop
 ls -l .
 ```
 
