@@ -161,6 +161,12 @@ Sample employee record:
 1,Onfroi Greeno,Systems Administrator,Operation,Portland,OR,1992-03-31,2014-10-24,Application Support Analyst,2014-04-12
 ```
 
+Run the command bellow to install boto3 library:
+
+```
+sudo pip install boto3
+```
+
 ## Step 4 - Preload the items for the scan exercise
 
 In the exercise 2 we will discuss table scan and the alternatives. In this step, you are going to load the table with 1 milliton rows in preparation for the exercise.
