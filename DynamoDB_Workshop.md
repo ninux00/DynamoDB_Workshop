@@ -864,7 +864,7 @@ Employee name: Dale Marlin - hire date: 2014-10-19
 Total of employees: 1. Execution time: 0.268958091736 seconds
 ```
 
-## Exercise 5 – Sparse Indexes
+# Exercise 5 – Sparse Indexes
 
 You can use a sparse global secondary index to efficiently locate table items that have an uncommon attribute. To do this, you take advantage of the fact that table items that do not contain global secondary index attribute(s) are not indexed at all.
 
