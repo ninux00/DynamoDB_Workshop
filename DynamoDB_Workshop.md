@@ -204,7 +204,7 @@ In this exercise you will load data into DynamoDB tables that are provisioned wi
 
 ##### Open a Second terminal in your Cloud9 IDE by clicking on the "+" icon next to the Terminal's tab.
  
-#### Step 1 – Create the DynamoDB table
+## Step 1 – Create the DynamoDB table
 Run the following AWS CLI command to create the first DynamoDB table called 'tlog':
 ```
 aws dynamodb create-table --table-name tlog \
@@ -245,7 +245,7 @@ You can run the following command to get only the table status:
 aws dynamodb describe-table --table-name tlog | grep TableStatus
 ```
 
-#### Step 2 - Load sample data into the table
+## Step 2 - Load sample data into the table
 
 Now that you have the table created, you can load some sample data running the Python script:
 
@@ -268,7 +268,7 @@ row: 500 in 0.715097904205
 RowCount: 500, Total seconds: 3.79715394974
 ```
 
-#### Step 3 - Load a larger file to compare the execution time
+## Step 3 - Load a larger file to compare the execution time
 
 Run the script again but at this time with a larger input data file:
 
@@ -308,7 +308,7 @@ RowCount: 2000, Total seconds: 171.298333883
 
 #### After loading some rows, the load time increased. In the sample output, the time increased from less than 1 sec to around 20 seconds.
 
-#### Step 4 - View the CloudWatch metrics on your table
+## Step 4 - View the CloudWatch metrics on your table
 
 Open the browser tab in the AWS console. If you don't have the AWS console opened, see the step 2 of the Preparation section above.
 
@@ -324,7 +324,7 @@ You see the metrics like the sample below:
 
 ##### Question: Why there are throttling events on the table and there are not on the GSI?
 
-#### Step 5 – Increase the capacity
+## Step 5 – Increase the capacity
 
 Run the following AWS CLI command to increase the WCU and RCU from 5 to 100.
 
@@ -341,7 +341,7 @@ aws dynamodb wait table-exists --table-name tlog
 
 ##### Question: How long did it take for increasing the capacity?
 
-#### Step 6 - Load more data with the new capacity
+## Step 6 - Load more data with the new capacity
 
 After the update, run the Python script again to populate the table with file logfile_medium2.csv with the same number of rows of the previous run. You will see that at this time the execution will be faster.
 
@@ -377,7 +377,7 @@ RowCount: 2000, Total seconds: 13.3077070713
 
 ##### Note: With the new capacity the load time was consistent for the whole dataset.
 
-#### Step 7 – Low capacity GSI
+## Step 7 – Low capacity GSI
 
 For the next step, we are going to create a new table with different capacity units. At this time, the GSI will have on 1 WCU and 1 RCU, for the purpose of this exercise.
 
@@ -459,7 +459,7 @@ This exercise will demonstrate the two methods of table scan, sequential and par
 Even though DynamoDB distributes a large table data across multiple physical partitions, a Scan operation can only read one partition at a time. For this reason, the throughput of a Scan is constrained by the maximum throughput of a single partition.
 To address these issues, the Scan operation can logically divide a table or secondary index into multiple segments, with multiple application workers scanning the segments in parallel.
 
-#### Step 1 – Execute a simple Scan
+## Step 1 – Execute a simple Scan
 Imagine you need to calculate the total of bytes sent for all records with response code <> 200.
 
 You can run a scan operation with a filter expression to filter out the uninteresting records. The application will them sum up the values of all the returned records where response code <> 200.
@@ -516,7 +516,7 @@ Total bytessent 6054250 in 23.5063591003 seconds
 
 Note down the time it took for the scan to complete.
 
-#### Step 2 – Execute a parallel scan
+## Step 2 – Execute a parallel scan
 
 To perform a parallel scan, each worker issues its own Scan request with the following parameters:
 
@@ -590,7 +590,7 @@ newitem['gsi_responsecode_hk'] = (newitem['requestid'] % SHARDS) + 1
 newitem['gsi_responsecode_sk'] = row[7] + "#" + row[2] + "#" + row[3]
 ```
 
-#### Step 1 - Creating the GSI
+## Step 1 - Creating the GSI
 The GSI for this exercise was created durint the Step 4 of the preparation phase. You can see the description of the GSI executing the following command:
 
 ```
@@ -629,7 +629,7 @@ You will see the description of the Global Secondary Indexes, like:
     ],
 ```
 
-#### Step 2 - Querying the GSI with shards
+## Step 2 - Querying the GSI with shards
 
 To get all the log records with response code equals to 404, you need to query all the GSI partitions using the sort key. You can do that using parallel threads in your application, and using the hash key and sort key.
 
@@ -700,7 +700,7 @@ The following figure presents the design of the table to
 
 ![Table1](./images/table1.png)
 
-#### Step 1 – Create the Employees table for GSI overloading
+## Step 1 – Create the Employees table for GSI overloading
 
 Run the AWS CLI command to create the table:
 
@@ -723,7 +723,7 @@ aws dynamodb wait table-exists --table-name employees
 
 Lets take a closer look at this create-table command. You are creating a table named “employees”. The Partition key on the table is “employeeID”. And the Sort key is “colA” which will be a derived value we will build in the python script. We will revisit this shortly. We will also create a GSI on this table and we will name this index as “gsi-overload”. The partition key on the GSI is “colA” and the sort key is “name”.
 
-#### Step 2 – Load data to the new table
+## Step 2 – Load data to the new table
 
 You will now execute a script that will load the data from the file named ./employees.csv into the table named “employees”.
 
@@ -763,7 +763,7 @@ The GSI will have the following content: On the same page, in the right hand pan
 
 ![Table-GSI2](./images/table-gsi2.png)
 
-#### Step 3 – Query the Employees table using the GSI with overloaded attributes
+## Step 3 – Query the Employees table using the GSI with overloaded attributes
 
 You can query all the employees based in WA state using the sample Python script:
 
@@ -870,7 +870,7 @@ You can use a sparse global secondary index to efficiently locate table items th
 
 Such a query can be very efficient because the number of items in the index will be significantly fewer than the number of items in the table. In addition, the fewer table attributes you project into the index, the fewer read capacity units you will consume from the index.
 
-#### Step 1 – Add a new GSI to the table employees
+## Step 1 – Add a new GSI to the table employees
 
 Execute the code to add a new GSI using the attribute 'is_manager' as the HashKey.
 
@@ -901,7 +901,7 @@ Run the command above until you see the output (it can take some minutes.).
 "IndexStatus": "ACTIVE",
 ```
 
-#### Step 2 – Query employees to find managers without using the GSI
+## Step 2 – Query employees to find managers without using the GSI
 
 Firstly, you will scan the table to find all the managers without using the GSI. In this case, you need to use a filter expression to return only the items where the attribute 'is_manager' is equal to 1.
 
@@ -933,7 +933,7 @@ Managers count: 84. # of records scanned: 4000. Execution time: 1.73592495918 se
 
 ##### Note: Observe the number of items scanned to return the values.
 
-#### Step 3 – Query employees to find managers using the sparse index
+## Step 3 – Query employees to find managers using the sparse index
 
 Now, you will query the employees using the GSI.
 
@@ -971,7 +971,7 @@ So, you can use the existing attributes to create a new GSI to attend the query 
 HASHKEY with the attribute state. It has values in the format '', like state:WA.
 RANGEKEY with the attribute city_dept. It has values in the format 'city:dept', like 'Seattle:Development'.
 
-#### Step 1 - Creating a new GSI for City-Department
+## Step 1 - Creating a new GSI for City-Department
 
 You can run the following command to create the new GSI gsi_city_dept:
 
@@ -1010,7 +1010,7 @@ For the RANGEKEY you can use the begins_with expression, so you can query using 
 
 During the query time, the KeyConditionExpression will be "Key('colA').eq(') & Key('city_dept').begins_with()"."
 
-#### Step 2 - Querying all the employees from a state
+## Step 2 - Querying all the employees from a state
 
 We can use the new GSI to query the table. If we are using only the state the query will not use the sort key attribute. But if the query has a value for the second parameter, the code will use the attribute city_dept of the GSI to query all the values that begin with the parameter value.
 
@@ -1050,7 +1050,7 @@ Name: Odella Kringe. City: San Antonio. Dept: Support
 Total of employees: 197. Execution time: 0.352508068085 seconds
 ```
 
-#### Step 3 - Querying all the employees of a city
+## Step 3 - Querying all the employees of a city
 
 Now, you have a new GSI you can use for query employees by state. Run the following Python application:
 
@@ -1071,7 +1071,7 @@ Name: Oby Peniello. City: Dallas. Dept: Support
 Total of employees: 47. Execution time: 0.275814056396 seconds
 ```
 
-#### Step 4 - Querying all the employees of a city and a department
+## Step 4 - Querying all the employees of a city and a department
 
 Now, you have a new GSI you can use for query employees by state. Run the following Python application:
 
@@ -1119,7 +1119,7 @@ masterresponse = table.update_item(
 )
 ```
 
-#### Step 1 - Get the current data for the employee
+## Step 1 - Get the current data for the employee
 
 Run the AWS CLI command to get the current values for the employee with employeeid 251:
 
@@ -1147,7 +1147,7 @@ STATE CA
 TITLE Network Architect
 ```
 
-#### Step 2 - Run two concurrent updates
+## Step 2 - Run two concurrent updates
 
 In order to view the 'transaction locking' running, you will run the command to update the same record at same time, following the steps:
 1.	Open a new terminal window on in the Cloud9.
@@ -1194,7 +1194,7 @@ Please wait 60 seconds
 Employee: 251 updated to Portland / OR.
 ```
 
-#### Step 3 - Verify the current status
+## Step 3 - Verify the current status
 
 Run the AWS CLI command to get the current values for the employee with employeeid 251:
 
@@ -1226,7 +1226,7 @@ This exercise will demonstrate a simple way to replicate items from one DynamoDB
 
 ![Architecture](./images/architecture.png)
 
-#### Step 1 – Create the replica table
+## Step 1 – Create the replica table
 
 You can reuse the Python code to create a new table for the replication. Run the command:
 
@@ -1261,7 +1261,7 @@ Run the command to wait until the table becomes Active:
 aws dynamodb wait table-exists --table-name tlog_replica
 ```
 
-#### Step 2 – Setup the IAM role required to execute the Lambda function
+## Step 2 – Setup the IAM role required to execute the Lambda function
 
 It is required to have an IAM role that can invoke the Lambda function with the right policies.
 
@@ -1278,7 +1278,7 @@ aws iam create-role --role-name ddbreplica_role --path "/service-role/" \
 --assume-role-policy-document file://iam-trust-relationship.json
 ```
 
-#### Step 3 – Associate the policy with the role
+## Step 3 – Associate the policy with the role
 
 You need to associate the correct policy with the new role. Check the file named **iam-role-policy.json**, it must have your region and account ID for the lines showed below.
 
@@ -1293,7 +1293,7 @@ aws iam put-role-policy --role-name ddbreplica_role \
 --policy-name ddbreplica_policy --policy-document file://iam-role-policy.json
 ```
 
-#### Step 4 – Create the Lambda function
+## Step 4 – Create the Lambda function
 
 You need to zip the code file:
 
@@ -1323,7 +1323,7 @@ aws lambda create-function --region us-east-1 \
 --description "Sample lambda function for dynamodb streams"
 ```
 
-#### Step 5 – Enable the DynamoDB streams
+## Step 5 – Enable the DynamoDB streams
 
 Enable DynamoDB stream for the table tlog:
 
@@ -1338,7 +1338,7 @@ Get the full ARN for the DynamoDB stream in the response, like the bold below.
 "ItemCount": 0, "CreationDateTime": 1489447719.586, "LatestStreamArn": "arn:aws:dynamodb:REGION:ACCOUNTID:table/tlog/stream/2017-03-13T23:38:19.480"
 ```
 
-#### Step 6 – Map the DynamoDB stream with the Lambda function
+## Step 6 – Map the DynamoDB stream with the Lambda function
 
 So far, you have the source table with DynamoDB stream enabled and the Lambda function, now you need to map the source stream with the Lambda function.
 
@@ -1366,7 +1366,7 @@ The expected result is:
 }
 ```
 
-#### Step 7 – Populate the table tlog to test the DynamoDB stream
+## Step 7 – Populate the table tlog to test the DynamoDB stream
 
 Run the Python code to load more items into the table:
 
@@ -1380,7 +1380,7 @@ Output:
 RowCount: 2000, Total seconds: 15.7203409672
 ```
 
-#### Step 8 – Verify the replica table tlog_replica
+## Step 8 – Verify the replica table tlog_replica
 
 You can scan the table tlog_replica to check if the records were replicated. It takes some time, so you may need to repeat the following command until you get the records.
 
